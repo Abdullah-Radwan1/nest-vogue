@@ -4,9 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe()); // <- this is required!
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors({
-    origin: 'https://angular-vogue.vercel.app', // your Angular frontend-url
+    //todo
+    origin: 'https://angular-vogue.vercel.app',
+    // http://localhost:4200
     credentials: true,
   });
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');

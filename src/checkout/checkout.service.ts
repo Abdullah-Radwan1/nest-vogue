@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
 import { Stripe } from 'stripe';
 import { OrdersService } from 'src/order/order.service';
+import { OrderStatus } from 'src/order/dto/order.dto';
 
 const stripeSecret = process.env.STRIPE_SECRET;
 
@@ -18,7 +19,7 @@ export class CheckoutService {
     const order = await this.ordersService.create({
       items: createCheckoutDto.items,
       totalAmount: createCheckoutDto.totalAmount,
-      status: 'PENDING',
+      status: OrderStatus.PENDING,
     });
 
     const session = await stripe.checkout.sessions.create({

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
-  create(createOrderDto) {
+  create(createOrderDto: CreateOrderDto) {
     return this.prisma.order.create({
       data: {
         items: {
@@ -21,13 +22,9 @@ export class OrdersService {
     });
   }
 
-  findAll() {
-    return this.prisma.order.findMany();
-  }
-
-  findOne(id: string) {
+  findOne(orderId: string) {
     return this.prisma.order.findUnique({
-      where: { id },
+      where: { id: orderId },
       include: { items: { include: { product: true } } },
     });
   }
@@ -41,28 +38,5 @@ export class OrdersService {
         createdAt: 'desc', // You can order by fields like `createdAt` if required
       },
     });
-  }
-
-  async getUserOrdersWithCount(userId: string, take: number, skip: number) {
-    const [orders, totalCount] = await this.prisma.$transaction([
-      this.prisma.order.findMany({
-        where: { userId },
-        take,
-        skip,
-        orderBy: {
-          createdAt: 'desc',
-        },
-      }),
-      this.prisma.order.count({ where: { userId } }),
-    ]);
-
-    return { orders, totalCount };
-  }
-  update(id: number, updateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
   }
 }
