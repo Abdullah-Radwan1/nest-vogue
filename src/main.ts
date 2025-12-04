@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); // <- this is required!
   app.enableCors({
-    origin: 'http://localhost:4200', // your Angular frontend-url
+    origin: 'https://angular-vogue.vercel.app', // your Angular frontend-url
     credentials: true,
   });
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
