@@ -8,6 +8,9 @@ export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
   create(createOrderDto: CreateOrderDto) {
+    if (!createOrderDto.items || !Array.isArray(createOrderDto.items)) {
+      throw new Error('Order must contain items');
+    }
     return this.prisma.order.create({
       data: {
         items: {
